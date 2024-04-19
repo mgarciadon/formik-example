@@ -1,3 +1,4 @@
+import { useFormik, ErrorMessage } from "formik";
 import React, { useState } from "react";
 import {
     Container,
@@ -14,72 +15,15 @@ import {
     ToastBody,
     ToastHeader
 } from "reactstrap";
+import * as yup from "yup"
 
 export const LoginForm = () => {
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [errors, setErrors] = useState(null);
     const [loading, setLoading] = useState(false);
     const [state, setState] = useState(false);
     const [isLoggedin, setLoggedin] = React.useState(false);
 
-
-    const changeEmailHandler = (e) => {
-        setEmail(e.target.value);
-    };
-    const changePasswordHandler = (e) => {
-        setPassword(e.target.value);
-    };
-
-    const generateObjectLogin = () => {
-        const Data = {
-            email,
-            password,
-        };
-        return Data;
-    };
-
-    const validEmail = (email) => {
-        return String(email)
-            .toLowerCase()
-            .match(/^\S+@\S+\.\S+$/);
-    };
-
-    const validationRequirementsLogin = {
-        email: { required: true, isEmail: true },
-        password: { required: true, minLength: 6 },
-    };
-
-    const validateLogin = (loginObject, field) => {
-        let errors = {};
-        if (loginObject) {
-            Object.keys(validationRequirementsLogin).forEach((key) => {
-                if (validationRequirementsLogin[key].required && !loginObject[key]) {
-                    errors[key] = "El campo es obligatorio.";
-                } else if (
-                    validationRequirementsLogin[key].isEmail &&
-                    !validEmail(loginObject[key]) &&
-                    (key === field || !field)
-                ) {
-                    errors[key] = "Debe ingresar un email válido.";
-                } else if (
-                    validationRequirementsLogin[key].minLength > 0 &&
-                    loginObject[key].length < validationRequirementsLogin[key].minLength
-                ) {
-                    errors[key] =
-                        "El campo debe terner al menos " +
-                        validationRequirementsLogin[key].minLength +
-                        " caracteres.";
-                }
-            });
-        }
-        return errors;
-    };
-
-
-    const loginHandler = (ev) => {
-        ev.preventDefault();
-        if (!email || !password) {
+    const loginHandler = (values) => {
+        if (!values.email || !values.password) {
             return;
         }
 
@@ -89,8 +33,8 @@ export const LoginForm = () => {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
-                email: email,
-                password: password
+                email: values.email,
+                password: values.password
             })
         })
             .then((res) => res.json())
@@ -99,11 +43,30 @@ export const LoginForm = () => {
                 setLoggedin(true);
             });
 
-        // console.log(email, password);
+        console.log(values.email, values.password);
     };
 
 
+    const loginValidationScheme = yup.object().shape({
+        email: yup.string().required("Ese campo es obligatorio").email("Ingrese un mail valido").max(20, "No puede tener mas de 20 caracteres").min(5, "no puede tener..."),
+        password: yup.string().required("Ese campo es obligatorio").min(5, "no puede tener...")
+    })
 
+    const initialState = {
+        email: "",
+        password: "",
+    }
+
+    const formik = useFormik({
+        initialValues: initialState,
+        validateSchema: loginValidationScheme,
+        validateOnBlur: true,
+        validateOnChange: false,
+        enableReinitialize: true,
+        onSubmit() {
+            loginHandler(formik.values);
+        }
+    });
 
     return (
         <Container>
@@ -111,7 +74,7 @@ export const LoginForm = () => {
                 <Col>
                     <Card>
                         <CardBody>
-                            <Form onSubmit={loginHandler}>
+                            <Form onSubmit={formik.handleSubmit}>
                                 <FormGroup className="pb-2 mr-sm-2 mb-sm-0">
                                     <Label for="email" className="mr-sm-2">
                                         Email
@@ -121,32 +84,28 @@ export const LoginForm = () => {
                                         type="email"
                                         id="email"
                                         className="form-control"
-                                        onChange={changeEmailHandler}
-                                        onBlur={(e) => {
-                                            setErrors(validateLogin(generateObjectLogin()));
-                                        }}
+                                        value={formik.values.email}
+                                        onChange={formik.handleChange}
+                                        onBlur={formik.handleBlur}
                                     />
-                                    {errors?.email && (
-                                        <Label className="text-danger"> {errors.email} </Label>
-                                    )}
+                                    {formik.errors.email && formik.touched.email ? (<div>{formik.errors.email}</div>) : null}
+                                    <ErrorMessage name="email" />
                                 </FormGroup>
                                 <FormGroup className="pb-2 mr-sm-2 mb-sm-0">
                                     <Label for="password" className="mr-sm-2">
                                         Password
                                     </Label>
                                     <Input
-                                        placeholder="contraseña"
+                                        placeholder="*********"
                                         type={state ? "text" : "password"}
                                         id="password"
                                         className="form-control"
-                                        onChange={changePasswordHandler}
-                                        onBlur={(e) => {
-                                            setErrors(validateLogin(generateObjectLogin()));
-                                        }}
+                                        value={formik.values.password}
+                                        onChange={formik.handleChange}
+                                        onBlur={formik.handleBlur}
                                     />
-                                    {errors?.password && (
-                                        <Label className="text-danger"> {errors.password} </Label>
-                                    )}
+                                    {formik.errors.password && formik.touched.password ? (<div>{formik.errors.password}</div>) : null}
+                                    <ErrorMessage name="password" />
                                 </FormGroup>
                                 <Button type="submit" color="primary">
                                     Login
