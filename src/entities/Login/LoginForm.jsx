@@ -1,5 +1,6 @@
 import { useFormik, ErrorMessage } from "formik";
 import React, { useState } from "react";
+import StyledInput from "../../shared/Input";
 import {
     Container,
     Row,
@@ -10,7 +11,6 @@ import {
     Form,
     FormGroup,
     Label,
-    Input,
     Toast,
     ToastBody,
     ToastHeader
@@ -79,33 +79,31 @@ export const LoginForm = () => {
                                     <Label for="email" className="mr-sm-2">
                                         Email
                                     </Label>
-                                    <Input
+                                    <StyledInput
                                         placeholder="email@email.com"
                                         type="email"
-                                        id="email"
                                         className="form-control"
                                         value={formik.values.email}
                                         onChange={formik.handleChange}
                                         onBlur={formik.handleBlur}
+                                        errors={formik.errors.email && formik.touched.email}
+                                        error={formik.errors.email}
                                     />
-                                    {formik.errors.email && formik.touched.email ? (<Label className="text-danger">{formik.errors.email}</Label>) : null}
-                                    <ErrorMessage name="email" />
                                 </FormGroup>
                                 <FormGroup className="pb-2 mr-sm-2 mb-sm-0">
                                     <Label for="password" className="mr-sm-2">
                                         Password
                                     </Label>
-                                    <Input
+                                    <StyledInput
                                         placeholder="*********"
-                                        type={state ? "text" : "password"}
-                                        id="password"
+                                        type="password"
                                         className="form-control"
                                         value={formik.values.password}
                                         onChange={formik.handleChange}
                                         onBlur={formik.handleBlur}
+                                        errors={formik.errors.password && formik.touched.password}
+                                        error={formik.errors.password}
                                     />
-                                    {formik.errors.password && formik.touched.password ? (<Label className="text-danger">{formik.errors.password}</Label>) : null}
-                                    <ErrorMessage name="password" />
                                 </FormGroup>
                                 <Button type="submit" color="primary">
                                     Login
