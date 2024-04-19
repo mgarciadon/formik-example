@@ -59,7 +59,7 @@ export const LoginForm = () => {
 
     const formik = useFormik({
         initialValues: initialState,
-        validateSchema: loginValidationScheme,
+        validationSchema: loginValidationScheme,
         validateOnBlur: true,
         validateOnChange: false,
         enableReinitialize: true,
@@ -88,7 +88,7 @@ export const LoginForm = () => {
                                         onChange={formik.handleChange}
                                         onBlur={formik.handleBlur}
                                     />
-                                    {formik.errors.email && formik.touched.email ? (<div>{formik.errors.email}</div>) : null}
+                                    {formik.errors.email && formik.touched.email ? (<Label className="text-danger">{formik.errors.email}</Label>) : null}
                                     <ErrorMessage name="email" />
                                 </FormGroup>
                                 <FormGroup className="pb-2 mr-sm-2 mb-sm-0">
@@ -104,7 +104,7 @@ export const LoginForm = () => {
                                         onChange={formik.handleChange}
                                         onBlur={formik.handleBlur}
                                     />
-                                    {formik.errors.password && formik.touched.password ? (<div>{formik.errors.password}</div>) : null}
+                                    {formik.errors.password && formik.touched.password ? (<Label className="text-danger">{formik.errors.password}</Label>) : null}
                                     <ErrorMessage name="password" />
                                 </FormGroup>
                                 <Button type="submit" color="primary">
