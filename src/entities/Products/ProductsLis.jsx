@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Table } from 'reactstrap';
-import api from '../../api';
+import { getAllProducts } from './product-service';
+
 
 
 const ProductList = () => {
     const [products, setProducts] = useState([])
 
     useEffect(() => {
-        api.get("/products").then((response) => {
+        getAllProducts.then((response) => {
             setProducts(response.data);
         }).finally(console.log("termino"));
     }, []);
