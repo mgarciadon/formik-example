@@ -1,6 +1,9 @@
-import { useFormik, ErrorMessage } from "formik";
+import { useFormik } from "formik";
 import React, { useState } from "react";
 import StyledInput from "../../shared/Input";
+import * as yup from "yup"
+import useToast from "../../hooks/useToast";
+import api from "../../api";
 import {
     Container,
     Row,
@@ -11,129 +14,100 @@ import {
     Form,
     FormGroup,
     Label,
-    Toast,
-    ToastBody,
-    ToastHeader
+    Spinner
 } from "reactstrap";
-import * as yup from "yup"
 
 export const LoginForm = () => {
-    const [loading, setLoading] = useState(false);
-    const [state, setState] = useState(false);
-    const [isLoggedin, setLoggedin] = React.useState(false);
+    const [isLogged, setLogged] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+    const { showToast, renderToast } = useToast();
 
-    const loginHandler = (values) => {
-        if (!values.email || !values.password) {
-            return;
-        }
+    const loginHandler = async (values) => {
+        setIsLoading(true);
 
-        fetch("https://reqres.in/api/login", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                email: values.email,
+        try {
+            const response = await api.post('/auth/login', {
+                username: values.username,
                 password: values.password
-            })
-        })
-            .then((res) => res.json())
-            .then((data) => {
-                console.log("RESPONSE from login success ", data);
-                setLoggedin(true);
             });
-
-        console.log(values.email, values.password);
+            console.log("Login successful: ", response.data);
+            setLogged(true);
+            showToast('Success', 'Login successful', 'success');
+        } catch (error) {
+            showToast('Error', error.message, 'error');
+            formik.resetForm();
+        }
+        
+        setIsLoading(false);
     };
-
-
-    const loginValidationScheme = yup.object().shape({
-        email: yup.string().required("Ese campo es obligatorio").email("Ingrese un mail valido").max(20, "No puede tener mas de 20 caracteres").min(5, "no puede tener..."),
-        password: yup.string().required("Ese campo es obligatorio").min(5, "no puede tener...")
-    })
-
-    const initialState = {
-        email: "",
-        password: "",
+    const handleLogout = () => {
+        setLogged(false);
+        showToast('Success', 'Logout successful', 'success');
+        formik.resetForm();
     }
 
+    const loginValidationScheme = yup.object().shape({
+        username: yup.string().required("Username is required").max(20, "Cannot exceed 20 characters").min(5, "Must be at least 5 characters"),
+        password: yup.string().required("Password is required").min(5, "Must be at least 5 characters")
+    });
+
     const formik = useFormik({
-        initialValues: initialState,
+        initialValues: {
+            username: "",
+            password: "",
+        },
         validationSchema: loginValidationScheme,
-        validateOnBlur: true,
-        validateOnChange: false,
-        enableReinitialize: true,
-        onSubmit() {
-            loginHandler(formik.values);
-        }
+        onSubmit: values => {
+            loginHandler(values);
+        },
     });
 
     return (
         <Container>
+            {renderToast()}
             <Row>
                 <Col>
-                    <Card>
-                        <CardBody>
-                            <Form onSubmit={formik.handleSubmit}>
-                                <FormGroup className="pb-2 mr-sm-2 mb-sm-0">
-                                    <Label for="email" className="mr-sm-2">
-                                        Email
-                                    </Label>
-                                    <StyledInput
-                                        placeholder="email@email.com"
-                                        type="email"
-                                        className="form-control"
-                                        value={formik.values.email}
-                                        onChange={formik.handleChange}
-                                        onBlur={formik.handleBlur}
-                                        errors={formik.errors.email && formik.touched.email}
-                                        error={formik.errors.email}
-                                    />
-                                </FormGroup>
-                                <FormGroup className="pb-2 mr-sm-2 mb-sm-0">
-                                    <Label for="password" className="mr-sm-2">
-                                        Password
-                                    </Label>
-                                    <StyledInput
-                                        placeholder="*********"
-                                        type="password"
-                                        className="form-control"
-                                        value={formik.values.password}
-                                        onChange={formik.handleChange}
-                                        onBlur={formik.handleBlur}
-                                        errors={formik.errors.password && formik.touched.password}
-                                        error={formik.errors.password}
-                                    />
-                                </FormGroup>
-                                <Button type="submit" color="primary">
-                                    Login
-                                </Button>
-                            </Form>
-                        </CardBody>
-                    </Card>
-                    <Card className="mt-5">
-                        <CardBody>
-                            {isLoggedin && (
-                                <>
-                                    <div className="p-3 bg-success my-2 rounded">
-                                        <Toast>
-                                            <ToastHeader>Success</ToastHeader>
-                                            <ToastBody>
-                                                User is logged in on the system.
-                                            </ToastBody>
-                                        </Toast>
-                                    </div>
-                                </>
-                            )}
-
-                            {!isLoggedin && (
-                                <div>
-                                    Please login with your credentials. <br /> Look at
-                                    https://reqres.in/ for api help.
-                                </div>
-                            )}
-                        </CardBody>
-                    </Card>
+                    {!isLogged ? (
+                        <Card>
+                            <CardBody className="text-center">
+                                {isLoading ? (
+                                    <Spinner color="primary" style={{ width: '3rem', height: '3rem' }}>
+                                        Loading...
+                                    </Spinner>) : (
+                                    <Form onSubmit={formik.handleSubmit}>
+                                        <FormGroup>
+                                            <Label for="username">Username</Label>
+                                            <StyledInput
+                                                placeholder="username"
+                                                type="username"
+                                                className="form-control"
+                                                value={formik.values.email}
+                                                onChange={formik.handleChange}
+                                                onBlur={formik.handleBlur}
+                                                errors={formik.errors.username && formik.touched.username}
+                                                error={formik.errors.username}
+                                            />
+                                        </FormGroup>
+                                        <FormGroup>
+                                            <Label for="password">Password</Label>
+                                            <StyledInput
+                                                placeholder="*********"
+                                                type="password"
+                                                className="form-control"
+                                                value={formik.values.password}
+                                                onChange={formik.handleChange}
+                                                onBlur={formik.handleBlur}
+                                                errors={formik.errors.password && formik.touched.password}
+                                                error={formik.errors.password}
+                                            />
+                                        </FormGroup>
+                                        <Button type="submit" color="primary">Login</Button>
+                                    </Form>)}
+                            </CardBody>
+                        </Card>
+                    ) : (
+                        <Button onClick={handleLogout} color="primary">Log Out</Button>
+                    )}
                 </Col>
             </Row>
         </Container>
