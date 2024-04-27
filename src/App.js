@@ -1,18 +1,23 @@
 import "bootstrap/dist/css/bootstrap.min.css";
-import { LoginForm } from "./entities/Login/LoginForm";
-import ProductList from "./entities/Products/ProductsLis";
+import ProductById from "./entities/Products/ProductById";
+import AddNewProduct from "./entities/Products/AddNewProduct";
+import UpdateProduct from "./entities/Products/UpdateProduct";
+import DeleteProduct from "./entities/Products/DeleteProduct";
 
 const App = () => {
   return (
     <>
-      <div className="d-flex justify-content-center align-items-center" style={{ height: '100vh' }}>
-        <div style={{ width: '300px' }}>
-          <LoginForm />
-        </div>
-        {/* <ProductList /> */}
+      <div
+        className="justify-content-center align-items-center "
+        style={{ height: "100vh", padding: 50, display: "flex", gap: 100 }}
+      >
+        <AddNewProduct />
+        <UpdateProduct />
+        <DeleteProduct />
       </div>
+      <ProductById />
     </>
   );
-}
+};
 
 export default App;
