@@ -1,18 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { Table } from 'reactstrap';
-import { getAllProducts } from './product-service';
-
-
+import { getAllProducts} from './product-service.tsx';
 
 const ProductList = () => {
-    const [products, setProducts] = useState([])
+    const [products, setProducts] = useState();
 
     useEffect(() => {
-        getAllProducts.then((response) => {
+        getAllProducts().then((response) => {
             setProducts(response.data);
-        }).finally(console.log("termino"));
+        });
     }, []);
-
 
     return (
         <Table responsive>
@@ -36,4 +33,4 @@ const ProductList = () => {
     );
 }
 
-export default ProductList
+export default ProductList;
