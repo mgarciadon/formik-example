@@ -16,15 +16,16 @@ import {
     Label,
     Spinner
 } from "reactstrap";
+import { Link, useNavigate } from "react-router-dom";
 
 export const LoginForm = () => {
     const [isLogged, setLogged] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const { showToast, renderToast } = useToast();
+    let navigate = useNavigate();
 
     const loginHandler = async (values) => {
         setIsLoading(true);
-
         try {
             const response = await api.post('/auth/login', {
                 username: values.username,
@@ -33,6 +34,7 @@ export const LoginForm = () => {
             console.log("Login successful: ", response.data);
             setLogged(true);
             showToast('Success', 'Login successful', 'success');
+            return navigate("/product", { replace: true });
         } catch (error) {
             showToast('Error', error.message, 'error');
             formik.resetForm();
@@ -101,6 +103,7 @@ export const LoginForm = () => {
                                                 error={formik.errors.password}
                                             />
                                         </FormGroup>
+                                       
                                         <Button type="submit" color="primary">Login</Button>
                                     </Form>)}
                             </CardBody>
