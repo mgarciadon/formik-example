@@ -75,7 +75,7 @@ const ProductList = () => {
     };
 
     return (
-        <div>
+        <div className="page">
             <Button onClick={handleAddProduct}>Agregar Producto</Button>
             <Table responsive>
                 <thead>
