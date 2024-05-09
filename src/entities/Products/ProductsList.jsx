@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Table } from 'reactstrap';
-import { getAllProducts } from './product-service';
+import { getAllProducts } from "./product-service";
 
 
-
-const ProductList = () => {
+const ProductsList = () => {
     const [products, setProducts] = useState([])
 
     useEffect(() => {
@@ -36,4 +35,4 @@ const ProductList = () => {
     );
 }
 
-export default ProductList
+export default ProductsList
