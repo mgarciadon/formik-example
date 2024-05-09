@@ -1,0 +1,39 @@
+/* ProductStyle.css */
+
+.product-list-container {
+    padding: 20px;
+}
+
+.product-list-title {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.add-product-button {
+    margin-bottom: 20px;
+}
+
+.search-input {
+    margin-bottom: 20px;
+}
+
+.product-table {
+    width: 100%;
+}
+
+.product-table th {
+    font-weight: bold;
+}
+
+.product-table td, .product-table th {
+    padding: 8px;
+    text-align: left;
+}
+
+.modal-dialog {
+    max-width: 600px;
+}
+
+.modal-body {
+    padding: 20px;
+}
