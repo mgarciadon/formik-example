@@ -12,7 +12,7 @@ const useToast = () => {
         setMessage(message);
         setToastType(type);
         setIsVisible(true);
-        setTimeout(() => setIsVisible(false), 3000); // Auto-hide after 3000ms
+        setTimeout(() => setIsVisible(false), 3000); 
     }, []);
 
     const renderToast = () => {
@@ -20,7 +20,7 @@ const useToast = () => {
 
         return (
             <div className="position-fixed top-0 start-0 p-3" style={{ zIndex: 1050 }}>
-                <Toast onClose={() => setIsVisible(false)} show={isVisible} delay={3000} autohide>
+                <Toast onClose={() => setIsVisible(false)} show={isVisible} delay={3000} autohide="true">
                     <ToastHeader icon={toastType}>
                         {title}
                     </ToastHeader>
