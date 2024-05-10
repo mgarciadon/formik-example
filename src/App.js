@@ -1,10 +1,14 @@
 import "bootstrap/dist/css/bootstrap.min.css";
-import { LoginForm } from "./components/LoginForm";
+import ProductList from "./entities/Products/ProductList";
+import LoginForm from "./entities/Login/LoginForm";
 
 const App = () => {
   return (
     <>
-      <LoginForm />
+    <div><LoginForm /></div>
+    <h1 className="d-flex justify-content-center align-items-center">Lista de productos</h1>
+    <div><ProductList /> </div>
+      
     </>
   );
 }
