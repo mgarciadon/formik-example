@@ -15,3 +15,7 @@ export const createProduct = (title, price, category) => {
     category: category,
   });
 };
+
+export const deleteProduct = (id) => {
+  return api.delete(`/products/${id}`);
+};
