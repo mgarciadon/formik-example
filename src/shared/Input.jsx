@@ -14,7 +14,7 @@ const StyledInput = ({placeholder, type, className, value, onChange, onBlur, err
                 onBlur={onBlur}
             />
             {errors ? (<Label className="text-danger">{error}</Label>) : null}
-            <ErrorMessage name={type} />
+            <ErrorMessage name={type}/>
         </>
     )
 }
