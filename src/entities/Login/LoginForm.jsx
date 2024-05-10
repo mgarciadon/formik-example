@@ -1,9 +1,11 @@
 import { useFormik } from "formik";
-import React, { useState } from "react";
+import  { useState } from "react";
 import StyledInput from "../../shared/Input";
 import * as yup from "yup"
 import useToast from "../../hooks/useToast";
 import api from "../../api";
+import { Link } from 'react-router-dom';
+
 import {
     Container,
     Row,
@@ -101,7 +103,10 @@ export const LoginForm = () => {
                                                 error={formik.errors.password}
                                             />
                                         </FormGroup>
+                                        <Link to="/products">
                                         <Button type="submit" color="primary">Login</Button>
+                                         </Link>
+                                        
                                     </Form>)}
                             </CardBody>
                         </Card>
