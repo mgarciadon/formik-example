@@ -4,6 +4,8 @@ import { LoginForm } from "./entities/Login/LoginForm";
 import ProductsList from "./entities/Products/ProductsList";
 import ProductById from "./entities/Products/ProductById";
 import CreateProduct from "./entities/Products/CreateProduct";
+import DeleteProduct from "./entities/Products/DeleteProduct";
+import UpdateProduct from "./entities/Products/UpdateProduct";
 
 const App = () => {
   return (
@@ -19,6 +21,9 @@ const App = () => {
               <Route path="/products" element={<ProductsList />} />
               <Route path="/productById" element={<ProductById />} />
               <Route path="/createProduct" element={<CreateProduct />} />
+              <Route path="/deleteProduct" element={<DeleteProduct />} />
+              <Route path="/updateProduct" element={<UpdateProduct />} />
+
             </Routes>
           </Router>
 

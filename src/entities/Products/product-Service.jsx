@@ -19,3 +19,7 @@ export const createProduct = (title, price, category) => {
 export const deleteProduct = (id) => {
   return api.delete(`/products/${id}`);
 };
+
+export const updateProduct = (id) => {
+  return api.put(`/products/${id}`);
+};

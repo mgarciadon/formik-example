@@ -30,26 +30,28 @@ const DeleteProduct = () => {
       .finally(() => {
         setLoading(false);
       });
-
-    const handleDeleteProduct = () => {
-      setLoading(true);
-      setErrorMessage("");
-      setSuccessMessage("");
-
-      deleteProduct(productId)
-        .then(() => {
-          setSuccessMessage("Producto eliminado con exito");
-          setProduct(null);
-        })
-        .catch((err) => {
-          console.error("Error al eliminar el producto", err);
-          setErrorMessage("Error al eliminar el producto");
-        })
-        .finally(() => {
-          setLoading(false);
-        });
-    };
   };
+
+  const handleDelete = () => {
+    window.alert("Estas seguro que deseas eliminar este producto?")
+    setLoading(true);
+    setErrorMessage("");
+    setSuccessMessage("");
+
+    deleteProduct(productId)
+      .then(() => {
+        setSuccessMessage("Producto eliminado con exito");
+        setProduct(null);
+      })
+      .catch((err) => {
+        console.error("Error al eliminar el producto", err);
+        setErrorMessage("Error al eliminar el producto");
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
+
   return (
     <div>
       <Form onSubmit={handleForSumbit}>
@@ -81,7 +83,7 @@ const DeleteProduct = () => {
           <p>Categoría: {product.category}</p>
           <Button
             color="danger"
-            onClick={handleDeleteProduct}
+            onClick={handleDelete}
             disabled={loading}
           >
             Eliminar Producto
