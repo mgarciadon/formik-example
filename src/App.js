@@ -6,10 +6,10 @@ const App = () => {
   return (
     <>
       <div className="d-flex justify-content-center align-items-center" style={{ height: '100vh' }}>
-        <div style={{ width: '300px' }}>
+        {/* <div style={{ width: '300px' }}>
           <LoginForm />
-        </div>
-        {/* <ProductList /> */}
+        </div> */}
+        <ProductList />
       </div>
     </>
   );

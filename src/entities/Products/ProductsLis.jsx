@@ -8,11 +8,10 @@ const ProductList = () => {
     const [products, setProducts] = useState([])
 
     useEffect(() => {
-        getAllProducts.then((response) => {
+        getAllProducts().then((response) => {
             setProducts(response.data);
         }).finally(console.log("termino"));
     }, []);
-
 
     return (
         <Table responsive>
