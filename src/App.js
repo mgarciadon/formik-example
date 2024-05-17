@@ -1,17 +1,20 @@
-import "bootstrap/dist/css/bootstrap.min.css";
-import { LoginForm } from "./entities/Login/LoginForm";
-import ProductList from "./entities/Products/ProductsLis";
+import React from "react";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
-const App = () => {
+import ProductsList from "./entities/Products/ProductsList";
+import ProductDetail from "./entities/Products/ProductDetail";
+import ProductForm from "./entities/Products/ProductForm";
+
+function App() {
   return (
-    <>
-      <div className="d-flex justify-content-center align-items-center" style={{ height: '100vh' }}>
-        <div style={{ width: '300px' }}>
-          <LoginForm />
-        </div>
-        {/* <ProductList /> */}
-      </div>
-    </>
+    <Router>
+      <Routes>
+        <Route exact path="/products" element={<ProductsList />} />
+        <Route exact path="/products/new" element={<ProductForm />} />
+        <Route exact path="/products/edit/:id" element={<ProductForm />} />
+        <Route exact path="/products/:id" element={<ProductDetail />} />
+      </Routes>
+    </Router>
   );
 }
 
