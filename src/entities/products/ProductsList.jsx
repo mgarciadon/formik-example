@@ -1,20 +1,34 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Table } from 'reactstrap';
 import { getAllProducts } from './product.service';
+import { AuthContext } from '../../AuthProvider';
+import useToast from '../../hooks/useToast';
 
 
 
 const ProductList = () => {
-    const [products, setProducts] = useState([])
+    const { isLoggedIn } = useContext(AuthContext);
+    const [products, setProducts] = useState([]);
+    const { showToast, renderToast } = useToast();
 
     useEffect(() => {
-        getAllProducts().then((response) => {
-            setProducts(response.data);
-        }).finally(console.log("termino"));
-    }, []);
+        const getProducts = async () => {
+            if (isLoggedIn) {
+                try {
+                    const response = await getAllProducts();
+                    setProducts(response.data);
+                } catch (error) {
+                    showToast('Error', error, 'error');
+                }
+            }
+        };
+
+        getProducts();
+    }, [isLoggedIn]);
 
     return (
         <Table responsive>
+            {renderToast()}
             <thead>
                 <tr>
                     <th>Producto</th>
