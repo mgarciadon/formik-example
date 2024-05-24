@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Table } from 'reactstrap';
-import { getAllProducts } from './product-service';
+import { getAllProducts } from './product.service';
 
 
 
