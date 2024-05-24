@@ -1,6 +1,6 @@
 import { useFormik } from "formik";
 import React, { useState } from "react";
-import StyledInput from "../../shared/Input";
+import FormInput from "../../shared/Input";
 import * as yup from "yup"
 import useToast from "../../hooks/useToast";
 import api from "../../api";
@@ -16,6 +16,7 @@ import {
     Label,
     Spinner
 } from "reactstrap";
+import ProductList from "../products/ProductsList";
 
 export const LoginForm = () => {
     const [isLogged, setLogged] = useState(false);
@@ -26,25 +27,30 @@ export const LoginForm = () => {
         setIsLoading(true);
 
         try {
-            const response = await api.post('/auth/login', {
+            const response = await api.post('/authentication/authenticate', {
                 username: values.username,
                 password: values.password
             });
-            console.log("Login successful: ", response.data);
-            setLogged(true);
-            showToast('Success', 'Login successful', 'success');
+            const token = response.data;
+            if (token) {
+                localStorage.setItem('token', token);
+                setLogged(true);
+                showToast('Success', 'Login successful', 'success');
+            }
         } catch (error) {
             showToast('Error', error.message, 'error');
             formik.resetForm();
         }
-        
+
         setIsLoading(false);
     };
+
     const handleLogout = () => {
         setLogged(false);
+        localStorage.removeItem('token');
         showToast('Success', 'Logout successful', 'success');
         formik.resetForm();
-    }
+    };
 
     const loginValidationScheme = yup.object().shape({
         username: yup.string().required("Username is required").max(20, "Cannot exceed 20 characters").min(5, "Must be at least 5 characters"),
@@ -77,7 +83,7 @@ export const LoginForm = () => {
                                     <Form onSubmit={formik.handleSubmit}>
                                         <FormGroup>
                                             <Label for="username">Username</Label>
-                                            <StyledInput
+                                            <FormInput
                                                 placeholder="username"
                                                 type="username"
                                                 className="form-control"
@@ -90,7 +96,7 @@ export const LoginForm = () => {
                                         </FormGroup>
                                         <FormGroup>
                                             <Label for="password">Password</Label>
-                                            <StyledInput
+                                            <FormInput
                                                 placeholder="*********"
                                                 type="password"
                                                 className="form-control"
@@ -106,7 +112,10 @@ export const LoginForm = () => {
                             </CardBody>
                         </Card>
                     ) : (
-                        <Button onClick={handleLogout} color="primary">Log Out</Button>
+                        <>
+                            <Button onClick={handleLogout} color="primary">Log Out</Button>
+                            <ProductList />
+                        </>
                     )}
                 </Col>
             </Row>

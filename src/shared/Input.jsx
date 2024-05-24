@@ -1,7 +1,7 @@
 import { Input, Label } from "reactstrap";
 import { ErrorMessage } from "formik";
 
-const StyledInput = ({placeholder, type, className, value, onChange, onBlur, errors, error}) => {
+const FormInput = ({placeholder, type, className, value, onChange, onBlur, errors, error}) => {
     return (
         <>
             <Input
@@ -19,4 +19,4 @@ const StyledInput = ({placeholder, type, className, value, onChange, onBlur, err
     )
 }
 
-export default StyledInput;
+export default FormInput;
